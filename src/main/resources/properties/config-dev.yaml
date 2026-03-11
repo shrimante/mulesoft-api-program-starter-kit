@@ -1,0 +1,24 @@
+app:
+  name: "mulesoft-api-program-starter-kit"
+  layer: "Experience"
+  environment: "dev"
+
+http:
+  port: "8081"
+  responseTimeout: "30000"
+
+# Configurations for Logging Accelerator
+logging:
+  detailed-logs-enabled: "true"
+
+# Configurations for Error Handling Accelerator
+error:
+  expose-internal-details-externally: "true"
+  support-contact: "helpdesk@enterprise.com"
+
+# Backend Systems (Placeholders)
+backend:
+  system-papi:
+    host: "api-dev.enterprise.com"
+    port: "443"
+    path: "/customers"

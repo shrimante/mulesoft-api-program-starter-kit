@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
+
+	<munit:config name="api-main-test-suite.xml" />
+
+	<munit:test name="api-main-flow-success-test" doc:id="test-success" description="Test success path for API main flow">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock Business Flow" processor="flow-ref">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="get-customers-business-flow" attributeName="name" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value='[{"id": "123", "firstName": "John", "lastName": "Doe", "email": "john@example.com"}]' mediaType="application/json" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to api-main-flow" name="api-main-flow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert Status Success" expression="#[payload.status]" is="#[munit-tools:equalTo('success')]"/>
+			<munit-tools:assert-that doc:name="Assert Correlation ID" expression="#[payload.correlationId]" is="#[munit-tools:notNullValue()]"/>
+		</munit:validation>
+	</munit:test>
+
+	<munit:test name="api-main-flow-not-found-test" doc:id="test-fail" description="Test 404 path for API main flow">
+		<munit:execution >
+			<munit:set-event doc:name="Set API Path">
+				<munit:attributes value="#[{requestPath: '/api/invalid'}]" />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to api-main-flow" name="api-main-flow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert HTTP 404 mapped by Shared Error Handler" expression="#[payload.error.category]" is="#[munit-tools:equalTo('NOT_FOUND')]"/>
+		</munit:validation>
+	</munit:test>
+
+</mule>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http"
+    xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
+
+    <flow name="api-main-flow" doc:id="main-flow" doc:name="API Main Entry Flow">
+        <http:listener doc:name="Listener" config-ref="HTTP_Listener_config" path="/api/*">
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body>#[payload]</http:body>
+            </http:error-response>
+        </http:listener>
+
+        <!-- Correlation ID Handling via Logging Accelerator -->
+        <set-variable variableName="correlationId" value="#[attributes.headers['x-correlation-id'] default uuid()]" doc:name="Capture Correlation ID"/>
+        
+        <!-- Standard Flow Start Logging -->
+        <flow-ref name="logging-flow-start-subflow" doc:name="Log Flow Start" />
+
+        <choice doc:name="Router">
+            <when expression="#[attributes.requestPath == '/api/customers']">
+                <flow-ref name="get-customers-business-flow" doc:name="Call Business Logic"/>
+            </when>
+            <otherwise>
+                <raise-error type="APP:NOT_FOUND" description="The requested API resource does not exist." />
+            </otherwise>
+        </choice>
+
+        <!-- Standard Flow End Logging -->
+        <flow-ref name="logging-flow-end-subflow" doc:name="Log Flow End" />
+    </flow>
+
+</mule>
