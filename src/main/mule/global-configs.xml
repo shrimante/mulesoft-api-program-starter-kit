@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<mule xmlns:secure-properties="http://www.mulesoft.org/schema/mule/secure-properties"
+<mule xmlns:mulesoft-custom-logger="http://www.mulesoft.org/schema/mule/mulesoft-custom-logger" xmlns:secure-properties="http://www.mulesoft.org/schema/mule/secure-properties"
     xmlns:http="http://www.mulesoft.org/schema/mule/http"
     xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="
 http://www.mulesoft.org/schema/mule/secure-properties http://www.mulesoft.org/schema/mule/secure-properties/current/mule-secure-properties.xsd 
-http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/mulesoft-custom-logger http://www.mulesoft.org/schema/mule/mulesoft-custom-logger/current/mule-mulesoft-custom-logger.xsd">
 
     <!-- Global Property Loading -->
     <configuration-properties doc:name="Configuration properties" file="properties/config-${mule.env}.yaml" />
@@ -20,13 +21,18 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
         <http:listener-connection host="0.0.0.0" port="${http.port}" />
     </http:listener-config>
 
-    <!-- Global Error Handler Import from Accelerator -->
+    <!-- Global Error Handler Import from Accelerator
     <import doc:name="Import Error Handling Accelerator" file="global-error-handler.xml" />
+    -->
     
-    <!-- Global Logging subflow Import from Accelerator -->
+    <!-- Global Logging subflow Import from Accelerator
     <import doc:name="Import Logging Accelerator" file="common-logging.xml" />
+    -->
 
-    <!-- Configuration for Global Error Handler -->
+    <!-- Custom Logger Configuration -->
+
+    <!-- Configuration for Global Error Handler
     <configuration defaultErrorHandler-ref="global-error-handler" />
+    -->
 
 </mule>

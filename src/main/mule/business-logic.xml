@@ -5,27 +5,14 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd 
-http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd 
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/mulesoft-custom-logger http://www.mulesoft.org/schema/mule/mulesoft-custom-logger/current/mule-mulesoft-custom-logger.xsd"
+    xmlns:mulesoft-custom-logger="http://www.mulesoft.org/schema/mule/mulesoft-custom-logger">
 
     <sub-flow name="get-customers-business-flow" doc:id="business-flow" doc:name="Get Customers Business Logic">
-        <logger level="INFO" doc:name="Log Business Start" message="Entering business orchestration for customer retrieval..."/>
         
-        <!-- Simulate a Backend System Call using the shared configuration standards -->
-        <http:request method="GET" doc:name="Call System API" 
-            config-ref="HTTP_Request_configuration" 
-            path="/customers" 
-            responseTimeout="${http.responseTimeout}">
-            <http:headers>#[{"x-correlation-id": vars.correlationId}]</http:headers>
-        </http:request>
-
-        <!-- Use DataWeave from external file -->
-        <ee:transform doc:name="Transform Result" doc:id="transform">
-            <ee:message>
-                <ee:set-payload resource="dwl/transform-customer-response.dwl" />
-            </ee:message>
-        </ee:transform>
-
-        <logger level="INFO" doc:name="Log Business End" message="Business orchestration complete."/>
+        <logger level="INFO" doc:name="Logger" doc:id="0412b703-201d-4900-ad8d-4b74f10e5390" />
     </sub-flow>
 
     <http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration">

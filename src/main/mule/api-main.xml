@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<mule xmlns:http="http://www.mulesoft.org/schema/mule/http"
-    xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="
-http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
+<mule xmlns:mulesoft-custom-logger="http://www.mulesoft.org/schema/mule/mulesoft-custom-logger"
+    xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+    xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/mulesoft-custom-logger http://www.mulesoft.org/schema/mule/mulesoft-custom-logger/current/mule-mulesoft-custom-logger.xsd">
 
     <flow name="api-main-flow" doc:id="main-flow" doc:name="API Main Entry Flow">
         <http:listener doc:name="Listener" config-ref="HTTP_Listener_config" path="/api/*">
@@ -16,7 +17,6 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
         <set-variable variableName="correlationId" value="#[attributes.headers['x-correlation-id'] default uuid()]" doc:name="Capture Correlation ID"/>
         
         <!-- Standard Flow Start Logging -->
-        <flow-ref name="logging-flow-start-subflow" doc:name="Log Flow Start" />
 
         <choice doc:name="Router">
             <when expression="#[attributes.requestPath == '/api/customers']">
@@ -28,7 +28,8 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
         </choice>
 
         <!-- Standard Flow End Logging -->
-        <flow-ref name="logging-flow-end-subflow" doc:name="Log Flow End" />
-    </flow>
+		<logger level="INFO" doc:name="Logger" doc:id="908e15b6-3588-4fe9-9178-34c183ce01b3" />
+    
+</flow>
 
 </mule>
