@@ -18,7 +18,8 @@ http://www.mulesoft.org/schema/mule/mulesoft-custom-logger http://www.mulesoft.o
         
         <!-- Standard Flow Start Logging -->
 
-        <choice doc:name="Router">
+        <mulesoft-custom-logger:log doc:name="Log" doc:id="a883976b-c54e-447c-820b-3520002356bf" />
+		<choice doc:name="Router">
             <when expression="#[attributes.requestPath == '/api/customers']">
                 <flow-ref name="get-customers-business-flow" doc:name="Call Business Logic"/>
             </when>
